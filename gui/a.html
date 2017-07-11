@@ -1,0 +1,39 @@
+<html>
+<head>
+    <title></title>
+    <style type="text/css">
+        li {
+            prototype: loadImageToLi;
+            /*aspect: loadImageToLi url("loadimagetoli.tis");*/
+            width: 200dip;
+            height: 200dip;
+            
+            /*background: gold;*/
+            /*box-shadow: 1px 2px 5px -1px rgba(0, 0, 0, .3);*/
+            background-image :url(icon.png);
+        }
+    </style>
+    <script type="text/tiscript">
+        class loadImageToLi: Behavior {
+            function attached() {
+                this.style#background-image = "url(" + this.@#data-src + ")";
+                this.@#data-src = "";
+            }
+        }
+        self.ready = function(){
+
+        $(button).on("click", function(){
+             
+             var h = "<li data-src='http://sciter.com/wp-content/uploads/2016/11/legos.jpg'></li>";
+
+            $(#ul).append(h);
+          });
+}
+    </script>
+</head>
+<body>
+    
+    <button>click</button>
+    <ul#ul></ul>
+</body>
+</html>

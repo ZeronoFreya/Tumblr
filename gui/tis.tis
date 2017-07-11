@@ -1,0 +1,49 @@
+include "decorators.tis";
+// include "loadimagetoli.tis";
+
+self.ready = function(){
+
+    $(#window-btn).on("click", function(){
+         // view.msgbox(#information, "ty");
+
+        //  var h = "<li data-src='https://68.media.tumblr.com/469c21ccd53ec48c4f7caee21c3ca0a7/tumblr_orhs5iSD0b1qla6e4o1_100.jpg'></li>"+
+        //     "<li data-src='https://68.media.tumblr.com/3cfe306c1fa947e7fc67fc855072b1fc/tumblr_orfrdkb8b71qla6e4o4_100.jpg'></li>"+
+        //     "<li data-src='https://68.media.tumblr.com/10a073a7bcad5ea54d29b9c262853422/tumblr_ordtep1gy51qla6e4o1_100.jpg'></li>"+
+        //     "<li data-src='https://68.media.tumblr.com/c903ba9067dfb35c6766c8d0e967fc04/tumblr_osgv5275Jv1qla6e4o1_100.jpg'></li>";
+
+        // $(#ul).append(h);
+
+        // $(#ul > li:last-child).@.addClass("loading");
+        // $(#ul).$append(<li.loading></li>)
+        return view.loadImgList();
+        // var html = view.loadImgList();
+        // $(#ul).append(html);
+      });
+    $(.popup-view).on("click",function(){
+        $(#popup).style#display = "none";
+        $(.popup-view).style#background-image = "none";
+    })
+    $(#popup .download).on("click",function(){
+        $(#popup).style#display = "none";
+        $(.popup-view).style#background-image = "none";
+        var url = $(.popup-view).@#original;
+        var id = $(.popup-view).@#imgid;
+        // view.msgbox(#information, url);
+        return view.downloadOriginal(id, url);
+    })
+}
+function aaa(s){
+    view.msgbox(#information, s);
+}
+function appendImgList( html ){
+    self.$(#ul).append( html );
+}
+// # li = sciter.Element.create("li")
+//                 # li.set_attribute("id", x['id'])
+//                 # # li.set_attribute("data-src", file_path)
+//                 # ul.append(li)
+//                 # li.set_style_attribute( "background-image", file_path )
+// var h = "<li style='background-image: url(res:https://68.media.tumblr.com/469c21ccd53ec48c4f7caee21c3ca0a7/tumblr_orhs5iSD0b1qla6e4o1_100.jpg)'></li>"+
+//             "<li style='background-image: url(res:https://68.media.tumblr.com/3cfe306c1fa947e7fc67fc855072b1fc/tumblr_orfrdkb8b71qla6e4o4_100.jpg)'></li>"+
+//             "<li style='background-image: url(res:https://68.media.tumblr.com/10a073a7bcad5ea54d29b9c262853422/tumblr_ordtep1gy51qla6e4o1_100.jpg)'></li>"+
+//             "<li style='background-image: url(res:https://68.media.tumblr.com/c903ba9067dfb35c6766c8d0e967fc04/tumblr_osgv5275Jv1qla6e4o1_100.jpg)'></li>";

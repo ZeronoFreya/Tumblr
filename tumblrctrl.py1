@@ -1,0 +1,140 @@
+import json
+import sciter
+import requests
+import os
+# from six.moves import queue as Queue
+import queue as Queue
+from threading import Thread
+from tumblpy import Tumblpy
+
+class DownloadWorker(Thread):
+    def __init__(self, queue, proxies=None):
+        Thread.__init__(self)
+        self.queue = queue
+        self.proxies = proxies
+    def run(self):
+        # while True:
+        # medium_type, el, uri, requestId = self.queue.get()
+        medium_type, ld = self.queue.get()
+        print ("开启线程：" + self.name)
+        self.download( medium_type, ld )
+        self.queue.task_done()
+        print ("退出线程：" + self.name)
+
+    def download( self, medium_type, ld ):
+        # print(medium_type, ld )
+        try:
+            if medium_type == "list":
+                dashboard = ld['el'].getDashboard()
+                for x in dashboard:
+                    li = sciter.Element.create("li")
+                    li.set_attribute("data-src", x['alt_sizes'])
+                    ld['ul'].append(li)
+                return
+            elif medium_type == "photo":
+                print(medium_type, ld['requestId'])
+                req = requests.get( ld['uri'], proxies=self.proxies )
+                # print("1",ld['requestId'],ld['uri'])
+                ld['el'].data_ready( ld['uri'], req.content, ld['requestId'] )
+        except Exception as e:
+            print('err2',e)
+
+class TumblrCtrl(object):
+    """docstring for TumblrCtrl"""
+    def __init__(self):
+        super(TumblrCtrl, self).__init__()
+        self.cfg = {"alt_sizes": -2, "dashboard_param": {"limit": 20, "since_id": 0}, "proxies": {}}
+        with open('data.json', 'r') as f:
+            self.cfg.update( json.load(f) )
+        with open('tumblr_credentials.json', 'r') as f:
+            self.tumblr_key = json.load(f)
+        self.proxies = self.cfg['proxies']
+        self.queue = Queue.Queue()
+        self.tumblr = Tumblpy(
+                self.tumblr_key['consumer_key'],
+                self.tumblr_key['consumer_secret'],
+                self.tumblr_key['oauth_token'],
+                self.tumblr_key['oauth_token_secret'],
+                proxies=self.proxies
+            )
+
+    def loadImgList(self, el, ul):
+        '''获取图片列表
+            {
+                'id': 0,
+                'source_url' : ,
+                'original_size' : v['photos'][0]['original_size']['url'],
+                'alt_sizes' : 'https://68.media.tumblr.com/*_[75|100|540|1280].*'
+            }
+        '''
+        # print(self, el)
+        self.scheduling()
+        return self.queue.put(( "list", {'el':el,'ul':ul} ))
+
+    def myOnLoadDatas(self, el, uri, requestId):
+        self.scheduling()
+        # print(requestId)
+        ld = { 'el' : el, 'uri' : uri, 'requestId' : requestId }
+        self.queue.put(( "photo", ld ))
+        self.queue.join()
+        return True
+
+    def scheduling( self ):
+        # 创建工作线程
+        worker = DownloadWorker(self.queue, proxies=self.proxies)
+        #设置daemon属性，保证主线程在任何情况下可以退出
+        worker.daemon = True
+        worker.start()
+        return
+
+    # def downloadImg(self, url):
+    #     name = url.split("/")[-1].split("?")[0]
+    #     file_path = os.path.join('R:\imgTemp', name)
+    #     print(file_path)
+    #     if not os.path.isfile(file_path):
+    #         retry_times = 0
+    #         while retry_times < 5:
+    #             try:
+    #                 resp = requests.get(url,
+    #                                     stream=True,
+    #                                     proxies=self.cfg['proxies'],
+    #                                     timeout=10)
+    #                 with open(file_path, 'wb') as fh:
+    #                     for chunk in resp.iter_content(chunk_size=1024):
+    #                         fh.write(chunk)
+    #                 break
+    #             except:
+    #                 pass
+    #             retry_times += 1
+    #     return file_path
+
+
+
+    # def onLoadDatas( self, el, ld ):
+    #     uri = ld.uri
+    #     print(uri)
+    #     req = requests.get( uri, proxies=self.cfg['proxies'] )
+    #     el.data_ready( uri, req.content, ld.requestId )
+    #     return False
+
+    def getDashboard(self):
+        dashboard = self.tumblr.dashboard( self.cfg['dashboard_param'] )
+        data, distId = [], []
+        for v in dashboard["posts"]:
+            distId.append(v['id'])
+            data.append(
+                {
+                    'id': v['id'],
+                    'source_url' : v.get('source_url', ''),
+                    'original_size' : v['photos'][0]['original_size']['url'],
+                    'alt_sizes' : v['photos'][0]['alt_sizes'][self.cfg['alt_sizes']]['url']
+                }
+            )
+            # print('Here:', json.dumps(v['photos'], indent=4))
+        distId.sort()
+        # -2为接着图片序列， 原因不明  -3为重复上一次最后一张图片
+        self.cfg['dashboard_param']['since_id'] = distId[-2]
+        # with open('data.json', 'w') as f:
+        #     json.dump(self.cfg, f)
+        # print("since_id", distId[-2])
+        return data

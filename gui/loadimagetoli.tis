@@ -1,0 +1,22 @@
+class loadImageToLi: Behavior {
+    var _this;
+    function attached() {
+        _this = this;
+        // this.post( ::this.style#background-image = "url(" + this.@#data-src + ")" );
+        // this.$append(<div.btn><button.download></button><button.magnifier></button></div>)
+        this.on("click",function(){
+            // $(.popup-view).style#background-image = "url(" + this.selectParent("li").@#preview_size + ")" ;
+            // $(.popup-view).post( ::this.style#background-image = "url(" + _this.@#original + ")" );
+            $(#popup).style#display = "block";
+            var p = this.selectParent("li");
+            return view.loadPreviewImg( p.@#id, p.@#original, p.@#preview );
+        })
+    }
+}
+// {
+//     "id"              : p.@#id,
+//     "link_url"        : "",
+//     "original_size"  : p.@#original,
+//     "preview_size"  : p.@#preview,
+//     "alt_sizes"      : ""
+// }

@@ -1,0 +1,72 @@
+@const dark_gray: #3b3a3f;
+@const light_gray: #C8C8C8;
+@const black: #323232;
+@const white: #fafafa;
+@const light_green: #00ce9b;
+@const bg_color: #ffffff;
+
+@const dark_border: #cccccc;
+@const dark_font: #666666;
+@const light_font: #fafafa;
+@const novalue_font: #cccccc;
+
+@mixin LI-BACKGROUND {
+  background-attachment: scroll;
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
+/*@image-map bg-img {
+    src: url("img/bg.png");
+}*/
+@font-face {
+    font-family: exo2;
+    src: url("fonts/exo2regular.ttf");
+}
+
+body, h1, h2, h3, h4, h5, h6, hr, 
+p, a, blockquote, dl, dt, dd, ul, 
+ol, li, pre, form, fieldset, legend,
+button, input, textarea, th, td 
+{ margin:0; padding:0; }
+
+body{
+    /*background: @white ;*/
+    font-family: exo2;
+    font-size: 14pt;
+    /*box-shadow: 3px 3px 6px #555;*/
+    font-rendering-mode: sub-pixel;
+}
+html,body{
+    size: 100%%;
+    /*overflow:hidden;*/
+    color:@dark_font;
+}
+ul{
+	list-style-type: none;
+}
+li{
+    white-space: nowrap;
+    font-size: 12pt;
+}
+input{
+    font-family: exo2;
+    font-size: 14pt;
+    background: transparent;
+    border: none;
+    border-radius: none;
+    color:@dark_font;
+}
+@set set-background
+{
+  :root {
+     background-attachment: scroll;
+     background-repeat: no-repeat;
+     background-position: center center;
+    }
+}
+@set v-scroll-indicator {
+    .base {
+       width: 0;
+    }
+}
