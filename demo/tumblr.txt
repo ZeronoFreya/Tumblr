@@ -2,6 +2,7 @@ Python 3.6.1 |Anaconda 4.4.0 (64-bit)
 http://www.yeayee.com/article-6604068-1.html
 http://www.jianshu.com/p/f0a042982ec7
 https://www.artstation.com/
+https://juejin.im/entry/57b138e1165abd00542ab1fa
 
 http://68.media.tumblr.com/469c21ccd53ec48c4f7caee21c3ca0a7/tumblr_orhs5iSD0b1qla6e4o1_1280.jpg
 http://68.media.tumblr.com/3cfe306c1fa947e7fc67fc855072b1fc/tumblr_orfrdkb8b71qla6e4o4_1280.jpg
