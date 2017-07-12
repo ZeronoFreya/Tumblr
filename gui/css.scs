@@ -1,6 +1,6 @@
 @import "common.scs";
 @const width: 800dip;
-@const li-width: 150dip;
+@const li-width: 375px;
 
 html {
     padding: 5dip;
@@ -62,12 +62,12 @@ li {
     position: relative;
     overflow: hidden;
     /*cursor:url(img/magnifier.svg) 48 48;*/
-    cursor:url(img/magnifier.png) 16 16;
+    cursor:url(img/cursor.png) 25 25;
 }
-li:hover{
+/*li:hover{
     background-size:auto;
     transition: background-size(linear, 200ms);
-}
+}*/
 li:hover .btn{
     transform: translate(0,0);
     transition: transform(linear, 200ms);

@@ -31,13 +31,18 @@ def gets( t, s, d=None ):
 def mkMainDict( d, param ):
     data = []
     for v in d["posts"]:
-        data.append({
-            'id'              : gets(v, 'id', 0),
+        t = {
             'link_url'        : gets(v, 'link_url', ''),
-            'original_size'  : gets(v, 'photos.0.original_size.url', ''),
-            'preview_size'  : gets(v, 'photos.0.alt_sizes.' + str(param['preview_size']) + '.url', ''),
-            'alt_sizes'      : gets(v, 'photos.0.alt_sizes.' + str(param['alt_sizes']) + '.url', '')
-        })
+            'source_url'        : gets(v, 'source_url', '')
+        }
+        index = 1
+        for i in v['photos']:
+            t['id'] = str(v['id']) + '[' + str(index) + ']'
+            t['original_size'] = gets(i, 'original_size.url', '')
+            t['preview_size'] = gets(i, 'alt_sizes.' + str(param['preview_size']) + '.url', '')
+            t['alt_sizes'] = gets(i, 'alt_sizes.' + str(param['alt_sizes']) + '.url', '')
+            data.append(t.copy())
+            index += 1
     return data
 def getDashboards( tumblr, param ):
     # frame.call_function('aaa', 'yyy' )
@@ -88,7 +93,7 @@ class TumblrCtrl(object):
     def loadPreviewImg( self, data ):
 
         fileName = data['id'] + '_' + data['preview_size'].split("_")[-1]
-        # print(fileName)
+        print(fileName)
         # return
         file_path = os.path.join( self.target_folder, fileName )
         if not os.path.isfile(file_path):
@@ -117,7 +122,8 @@ class TumblrCtrl(object):
                 if f.done():
                     self.cfg['dashboard_param']['offset'] += self.cfg['dashboard_param']['limit']
                     for x in f.result():
-                        fileName = repr( x['id'] ) + '_' + x['alt_sizes'].split("_")[-1].split("?")[0]
+                        fileName = x['id'] + '_' + x['alt_sizes'].split("_")[-1]
+                        # print(fileName)
                         file_path = os.path.join( self.target_folder, fileName )
                         if not os.path.isfile(file_path):
                             self.tpool.submit(self._download, "photo", x, file_path )
