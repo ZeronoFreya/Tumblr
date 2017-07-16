@@ -1,9 +1,10 @@
 @import "common.scs";
 @const width: 800dip;
-@const li-width: 375px;
+@const list-w: 230px;
+@const list-h: 320px;
 
 html {
-    padding: 5dip;
+    /*padding: 5dip;*/
     background: transparent;
     /*background: gold;*/
     width: @width;
@@ -12,7 +13,7 @@ html {
 
 body {
     size: *;
-    border-radius: 5px;
+    /*border-radius: 5px;*/
     background: @bg_color;
     overflow: hidden;
     position: relative;
@@ -34,13 +35,16 @@ footer {
 }
 
 ul {
-    /*prototype: UlCtrl url("ulctrl.tis");*/
+    prototype: UlCtrl url("ulctrl.tis");
     flow: horizontal-wrap;
     border-spacing: 10dip;
     size: *;
     overflow: hidden;
     overflow-y: scroll-indicator;
-    /*overflow-y: auto;*/
+    /*overflow-y: scroll;*/
+    /*overflow-y: scroll scroll-manner(wheel-animation:false, wheel-step:@list-h);*/
+    /*overflow-y: scroll scroll-manner(wheel-animation:false);*/
+
     padding: 5dip;
     background: @light_gray;
 }
@@ -49,8 +53,8 @@ li {
     prototype: loadImageToLi url("loadimagetoli.tis");
     /*prototype: loadImageToLi;*/
     /*aspect: loadImageToLi url("loadimagetoli.tis");*/
-    width: @li-width;
-    height: width(100%);
+    width: @list-w;
+    height: @list-h;
     border-radius: 5dip;
     /*background: gold;*/
     /*style-set: set-background;*/
